@@ -1,2 +1,3 @@
 # gekommen
-Ich bin der welt abhanden gekommen
+     ——— Ich bin der welt abhanden gekommen
+ gekommen for gomoku
