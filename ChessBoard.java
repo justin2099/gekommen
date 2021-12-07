@@ -14,10 +14,20 @@ public class ChessBoard {
 
     public ChessBoard() {
         board = new Piece[15][15];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = Piece.BLANK;
+            }
+        }
     }
 
     public ChessBoard(int size) {
         board = new Piece[size][size];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = Piece.BLANK;
+            }
+        }
     }
 
     public ChessBoard(ChessBoard chessBoard) {
@@ -43,7 +53,7 @@ public class ChessBoard {
 
     public void setChess(Action action) {
         int x = action.getX(), y = action.getY();
-        board[x - 1][y - 1] = action.getPiece();
+        board[x][y] = action.getPiece();
     }
 
     public Piece getChess(int x, int y) {
@@ -65,8 +75,13 @@ public class ChessBoard {
         Set<vector> vectorsOfNeighbor = new HashSet<>();
 
         for (vector v:vector.values()) {
-            if (board[Action.getX() + v.getI()][Action.getY() + v.getJ()] == Action.getPiece()){
-                vectorsOfNeighbor.add(v);
+            try {
+                if (board[Action.getX() + v.getI()][Action.getY() + v.getJ()] == Action.getPiece()
+                ||  board[Action.getX() - v.getI()][Action.getY() - v.getJ()] == Action.getPiece()) {
+                    vectorsOfNeighbor.add(v);
+                }
+            }catch (IndexOutOfBoundsException e) {
+                continue;
             }
         }
 
@@ -98,12 +113,11 @@ public class ChessBoard {
             }
         }
 
-        return numOfPieces == 5;
+        return numOfPieces == 6;
     }
 
     public boolean isLiveThreeIn_v(Action Action, vector v) {
         int numOfPieces = 0;
-        // 处理越界报错
 
         // 沿正方向记录相邻子数；若有敌子在后，不为活三，输出false
         for (int i = 0; i < 3; i++) {
@@ -130,7 +144,7 @@ public class ChessBoard {
             }
         }
 
-        return numOfPieces == 3;
+        return numOfPieces == 4;
     }
 
     public boolean isGameWin(Action Action) {
@@ -155,5 +169,37 @@ public class ChessBoard {
         return numOf3 >= 2;
 
     }
+
+    // testing********pass***************************************************************************
+
+ /*   private void show(){
+        for (int i = 0; i < getSize(); i++) {
+            for (int j = 0; j < getSize(); j++) {
+                if (board[j][i] == Piece.BLACK) System.out.print(1);
+                else if (board[j][i] == Piece.WHITE) System.out.print(2);
+                else System.out.print(0);
+            }
+            System.out.println();
+        }
+    }
+
+
+    public static void main(String[] args) {
+        ChessBoard chessBoard = new ChessBoard(7);
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            int x = scanner.nextInt(); int y = scanner.nextInt();
+            Action action = new Action(x,y,Piece.BLACK);
+            chessBoard.setChess(action);
+            chessBoard.show();
+            for (vector  v: chessBoard.findNeighbors(action)) {
+                System.out.print(v.name());
+            }
+
+            if (chessBoard.isGameWin(action))
+                System.out.println("$$$$");
+        }
+    }                                                                          */
 
 }
