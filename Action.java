@@ -26,4 +26,13 @@ public class Action {
     public Piece getPiece() {
         return piece;
     }
+
+    public Piece getOpposite() {
+        switch (this.getPiece()){
+            case WHITE: return Piece.BLACK;
+            case BLACK: return Piece.WHITE;
+            default: return Piece.BLANK;
+        }
+    }
+
 }
