@@ -61,7 +61,7 @@ public class ChessBoard {
     }
 
     public boolean isRepeated(Action action) {
-        return this.board[action.getX() - 1][action.getY() - 1] != Piece.BLANK;
+        return this.board[action.getX()][action.getY()] != Piece.BLANK;
     }
 
     /* 我从这里开始修改
@@ -89,6 +89,7 @@ public class ChessBoard {
     }
 
     public boolean isFiveIn_v(Action Action, vector v) {
+//        ChessBoard testboard = new ChessBoard()
         int numOfPieces = 0;
 
         // 沿正方向记录相邻子数
@@ -170,36 +171,8 @@ public class ChessBoard {
 
     }
 
-    // testing********pass***************************************************************************
-
- /*   private void show(){
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = 0; j < getSize(); j++) {
-                if (board[j][i] == Piece.BLACK) System.out.print(1);
-                else if (board[j][i] == Piece.WHITE) System.out.print(2);
-                else System.out.print(0);
-            }
-            System.out.println();
-        }
-    }
 
 
-    public static void main(String[] args) {
-        ChessBoard chessBoard = new ChessBoard(7);
-        Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            int x = scanner.nextInt(); int y = scanner.nextInt();
-            Action action = new Action(x,y,Piece.BLACK);
-            chessBoard.setChess(action);
-            chessBoard.show();
-            for (vector  v: chessBoard.findNeighbors(action)) {
-                System.out.print(v.name());
-            }
-
-            if (chessBoard.isGameWin(action))
-                System.out.println("$$$$");
-        }
-    }                                                                          */
 
 }
