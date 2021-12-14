@@ -1,7 +1,6 @@
 public class Action {
     private Piece piece;
     private int x, y;
-    private int turn;
 
     public Action(){
         x = 0;
@@ -16,11 +15,11 @@ public class Action {
     }
 
     public int getX() {
-        return x;
+        return x ;
     }
 
     public int getY() {
-        return y;
+        return y ;
     }
 
     public Piece getPiece() {

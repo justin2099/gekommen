@@ -1,5 +1,4 @@
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -11,6 +10,7 @@ import java.util.Set;
 
 public class ChessBoard {
     private Piece[][] board;
+
 
     public ChessBoard() {
         board = new Piece[15][15];
@@ -61,7 +61,7 @@ public class ChessBoard {
     }
 
     public boolean isRepeated(Action action) {
-        return this.board[action.getX() - 1][action.getY() - 1] != Piece.BLANK;
+        return this.board[action.getX()][action.getY()] != Piece.BLANK;
     }
 
     /* 我从这里开始修改
@@ -89,6 +89,7 @@ public class ChessBoard {
     }
 
     public boolean isFiveIn_v(Action Action, vector v) {
+//        ChessBoard testboard = new ChessBoard()
         int numOfPieces = 0;
 
         // 沿正方向记录相邻子数
@@ -120,31 +121,31 @@ public class ChessBoard {
         int numOfPieces = 0;
 
         // 沿正方向记录相邻子数；若有敌子在后，不为活三，输出false
-        for (int i = 0; i < 3; i++) {
+        for (int i = 1; i < 3; i++) {
             try {
-                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
-                    numOfPieces++;
-                else if (board[Action.getX() + v.getI() * (i + 1)][Action.getY() + v.getJ() * (i + 1)] == Action.getOpposite())
+                if (board[Action.getX() + v.getI() * (i + 1)][Action.getY() + v.getJ() * (i + 1)] == Action.getOpposite())
                     return false;
+                else if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
+                    numOfPieces++;
                 else break;
             }catch (IndexOutOfBoundsException exception) {
-                break;
+                return false;
             }
         }
         // 沿反方向计数
-        for (int i = 0; i > -3; i--) {
+        for (int i = -1; i > -3; i--) {
             try {
-                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
-                    numOfPieces++;
-                else if (board[Action.getX() + v.getI() * (i + 1)][Action.getY() + v.getJ() * (i + 1)] == Action.getOpposite())
+                if (board[Action.getX() + v.getI() * (i - 1)][Action.getY() + v.getJ() * (i - 1)] == Action.getOpposite())
                     return false;
+                else if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
+                    numOfPieces++;
                 else break;
             }catch (IndexOutOfBoundsException exception) {
-                break;
+                return false;
             }
         }
 
-        return numOfPieces == 4;
+        return numOfPieces == 2;
     }
 
     public boolean isGameWin(Action Action) {
@@ -166,40 +167,27 @@ public class ChessBoard {
                 numOf3 ++;
         }
 
-        return numOf3 >= 2;
-
+        return (numOf3 >= 2) && Action.getPiece() == Piece.BLACK;
     }
 
-    // testing********pass***************************************************************************
 
- /*   private void show(){
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = 0; j < getSize(); j++) {
-                if (board[j][i] == Piece.BLACK) System.out.print(1);
-                else if (board[j][i] == Piece.WHITE) System.out.print(2);
-                else System.out.print(0);
-            }
-            System.out.println();
+    public void display(){
+        StdDraw.setCanvasSize(500,500);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.setXscale(0,500);
+        StdDraw.setYscale(0,500);
+        StdDraw.filledSquare(250,250,250);
+        StdDraw.setPenColor(StdDraw.RED);
+        for (int i = 0; i < board.length; i++) {
+            StdDraw.line(500*i/14,0,500*i/14,500);
+        }
+
+        for (int i = 0; i < board.length; i++) {
+            StdDraw.line(0,500*i/14,500,500*i/14);
         }
     }
 
 
-    public static void main(String[] args) {
-        ChessBoard chessBoard = new ChessBoard(7);
-        Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            int x = scanner.nextInt(); int y = scanner.nextInt();
-            Action action = new Action(x,y,Piece.BLACK);
-            chessBoard.setChess(action);
-            chessBoard.show();
-            for (vector  v: chessBoard.findNeighbors(action)) {
-                System.out.print(v.name());
-            }
-
-            if (chessBoard.isGameWin(action))
-                System.out.println("$$$$");
-        }
-    }                                                                          */
 
 }
