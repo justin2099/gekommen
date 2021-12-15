@@ -12,6 +12,10 @@ public class CountDown extends TimerTask {
         this.n = n;
     }
 
+    public int getN() {
+        return n;
+    }
+
     @Override
     public void run() throws EventException {
         while (n-- > 0){
