@@ -4,12 +4,12 @@ import java.util.Set;
 /**
  * This class serves as a Chess board with a handbook for Gomoku.
  * Wu change this code in 12/6.
-   I think I find a better way to achieve isFive and is33,
-   by 引入方向。只要沿有棋子的正反两方向搜索，够五个便isFive，够三个便isThree。
+ I think I find a better way to achieve isFive and is33,
+ by 引入方向。只要沿有棋子的正反两方向搜索，够五个便isFive，够三个便isThree。
  */
 
 public class ChessBoard {
-    private Piece[][] board;
+    protected Piece[][] board;
 
 
     public ChessBoard() {
@@ -76,8 +76,17 @@ public class ChessBoard {
 
         for (vector v:vector.values()) {
             try {
-                if (board[Action.getX() + v.getI()][Action.getY() + v.getJ()] == Action.getPiece()
-                ||  board[Action.getX() - v.getI()][Action.getY() - v.getJ()] == Action.getPiece()) {
+                if (board[Action.getX() + v.getI()][Action.getY() + v.getJ()] == Action.getPiece()) {
+                    vectorsOfNeighbor.add(v);
+                }
+            }catch (IndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+
+        for (vector v:vector.values()) {
+            try {
+                if (board[Action.getX() - v.getI()][Action.getY() - v.getJ()] == Action.getPiece()) {
                     vectorsOfNeighbor.add(v);
                 }
             }catch (IndexOutOfBoundsException e) {
@@ -95,8 +104,9 @@ public class ChessBoard {
         // 沿正方向记录相邻子数
         for (int i = 0; i < 5; i++) {
             try {
-                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
+                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece()) {
                     numOfPieces++;
+                }
                 else break;
             }catch (IndexOutOfBoundsException exception) {
                 break;
@@ -106,15 +116,16 @@ public class ChessBoard {
         // 沿反方向记录相邻子数
         for (int i = 0; i > -5; i--) {
             try {
-                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
+                if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece()) {
                     numOfPieces++;
+                }
                 else break;
             }catch (IndexOutOfBoundsException exception) {
                 break;
             }
         }
 
-        return numOfPieces == 6;
+        return numOfPieces >= 6;
     }
 
     public boolean isLiveThreeIn_v(Action Action, vector v) {
@@ -169,25 +180,5 @@ public class ChessBoard {
 
         return (numOf3 >= 2) && Action.getPiece() == Piece.BLACK;
     }
-
-
-    public void display(){
-        StdDraw.setCanvasSize(500,500);
-        StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.setXscale(0,500);
-        StdDraw.setYscale(0,500);
-        StdDraw.filledSquare(250,250,250);
-        StdDraw.setPenColor(StdDraw.RED);
-        for (int i = 0; i < board.length; i++) {
-            StdDraw.line(500*i/14,0,500*i/14,500);
-        }
-
-        for (int i = 0; i < board.length; i++) {
-            StdDraw.line(0,500*i/14,500,500*i/14);
-        }
-    }
-
-
-
 
 }
