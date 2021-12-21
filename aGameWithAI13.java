@@ -85,7 +85,6 @@ public class aGameWithAI13 {
                     break;
                 }
             } else {
-                System.out.println(actionAI.getX() + " " + actionAI.getY() + "|||||||||");
                 if (board.AI_Defense(action) != null) {
                     actionAI = board.AI_Defense(action);
                     System.out.println("D");
@@ -96,7 +95,7 @@ public class aGameWithAI13 {
                     actionAI = board.AI_BoringMove(actionAI);
                     System.out.println("B");
                 }
-                System.out.println(actionAI.getPiece().name() + "$$$$$$$$$$$$$$$$");
+
 
 
                 board.setChess(actionAI);

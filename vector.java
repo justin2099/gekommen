@@ -15,7 +15,5 @@ public enum vector {
         return j;
     }
 
-    public int getLength() {
-        return Math.min(this.i,this.j);
-    }
+
 }

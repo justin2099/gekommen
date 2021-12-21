@@ -3,7 +3,11 @@ import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.Scanner;
 
-public class aGameWithAI15 {
+/**
+ * 实现一次五子棋游戏的核心类。
+ * 提供一个play方法。
+ */
+public class aGame13 {
     final private Piece player1 = Piece.BLACK;
     final private Piece player2 = Piece.WHITE;
 
@@ -11,7 +15,7 @@ public class aGameWithAI15 {
     private Counter timer2 = new Counter(599);
     private Counter localCounter = new Counter(45);
 
-    private AIChessBoard board;
+    private ChessBoard board;
     private Point[][] PIECES_LOCATIONS;
 
     //Action-invoking range
@@ -22,191 +26,55 @@ public class aGameWithAI15 {
         return board.getSize();
     }
 
-    public void play() {
+    public void play(){
         StdDraw.enableDoubleBuffering();
         displayBackground();
-        stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
+        stdShow(timer1.getT(),timer2.getT(),localCounter.getT());
         initializeTimer();
 
-        boolean isGameOver = false;
-        int turn = 0;
-        Action action = new Action(0,0,Piece.BLACK);
-        Action actionAI = board.AI_FirstMove(Piece.WHITE);
-        while (!isGameOver) {
+        boolean isGameOver = false; int turn = 0;
+
+        while (!isGameOver){
             Piece player;
-
-
-            if (turn % 2 == 0) {
+            if (turn%2 == 0) {
                 player = player1;
                 timer1.openCounter();
                 timer1.changeReference(Instant.now());
-
-                localCounter.changeReference(Instant.now());
-                //功能性的校准，目的是为了让计时器从目前的时间点开始对准钟倒计时
-
-                Action tryAction;
-
-                try {
-                    while (true) {
-                        Point p = getClick();
-                        tryAction = handleClick(p, player);
-
-                        if (tryAction == null) continue;
-                        if (board.isRepeated(tryAction)) continue;
-                        if (board.is33(tryAction)) {
-                            show33();
-                            StdDraw.show();
-                            continue;
-                        }
-                        break;
-                    }
-
-                    action = tryAction;
-                    board.setChess(action);
-                    System.out.println(action.getX() +" "+ action.getY()+" from peoplehhh");
-//            refreshBoardCondition(action);
-                    stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
-                    StdDraw.show();
-
-                    if (board.isGameWin(action)) {
-                        isGameOver = true;
-                        showGameOver(player);
-                        StdDraw.show();
-                    }
-                    turn++;
-
-                    timer1.closeCounter();
-                    timer2.closeCounter();
-                    localCounter.resetT(30);
-                } catch (TimeOver | InterruptedException et) {
-                    et.printStackTrace();
-                    showGameOver(player.getOpposite());
-                    StdDraw.show();
-                    break;
-                }
-            } else {
-                if (board.AI_Defense(action) != null) {
-                    actionAI = board.AI_Defense(action);
-                    System.out.println("D");
-                } else if (board.AI_Offensive(actionAI) != null) {
-                    actionAI = board.AI_Offensive(actionAI);
-                    System.out.println("o");
-                } else {
-                    actionAI = board.AI_BoringMove(actionAI);
-                    System.out.println("B");
-                }
-
-
-
-                board.setChess(actionAI);
-                System.out.println(actionAI.getX() + " " + actionAI.getY());
-//            refreshBoardCondition(actionAI);
-                stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
-                StdDraw.show();
-                System.out.println(board.isGameWin(actionAI));
-
-                if (board.isGameWin(actionAI)) {
-                    isGameOver = true;
-                    showGameOver(Piece.WHITE);
-                    StdDraw.show();
-                }
-                turn++;
-
-                timer1.closeCounter();
-                timer2.closeCounter();
-                localCounter.resetT(30);
             }
-
-
-        }
-    }
-
-    public void play1() {
-        StdDraw.enableDoubleBuffering();
-        displayBackground();
-        stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
-        initializeTimer();
-
-        boolean isGameOver = false;
-        int turn = 0;
-        Action action = new Action(0,0,Piece.WHITE);
-        Action actionAI = board.AI_FirstMove(Piece.BLACK);
-        while (!isGameOver) {
-            Piece player;
-
-
-            if (turn % 2 == 1) {
+            else{
                 player = player2;
-                timer1.openCounter();
-                timer1.changeReference(Instant.now());
+                timer2.openCounter();
+                timer2.changeReference(Instant.now());
+            }
+            localCounter.changeReference(Instant.now());
+            //功能性的校准，目的是为了让计时器从目前的时间点开始对准钟倒计时
 
-                localCounter.changeReference(Instant.now());
-                //功能性的校准，目的是为了让计时器从目前的时间点开始对准钟倒计时
+            Action tryAction;
 
-                Action tryAction;
+            try {
+                while (true){
+                    Point p = getClick();
+                    tryAction = handleClick(p,player);
 
-                try {
-                    while (true) {
-                        Point p = getClick();
-                        tryAction = handleClick(p, player);
-
-                        if (tryAction == null) continue;
-                        if (board.isRepeated(tryAction)) continue;
-                        if (board.is33(tryAction)) {
-                            show33();
-                            StdDraw.show();
-                            continue;
-                        }
-                        break;
-                    }
-
-                    action = tryAction;
-                    board.setChess(action);
-                    System.out.println(action.getX() +" "+ action.getY()+" from peoplehhh");
-//            refreshBoardCondition(action);
-                    stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
-                    StdDraw.show();
-
-                    if (board.isGameWin(action)) {
-                        isGameOver = true;
-                        showGameOver(player);
+                    if (tryAction == null) continue;
+                    if (board.isRepeated(tryAction)) continue;
+                    if (board.is33(tryAction)) {
+                        show33();
                         StdDraw.show();
+                        continue;
                     }
-                    turn++;
-
-                    timer1.closeCounter();
-                    timer2.closeCounter();
-                    localCounter.resetT(30);
-                } catch (TimeOver | InterruptedException et) {
-                    et.printStackTrace();
-                    showGameOver(player.getOpposite());
-                    StdDraw.show();
                     break;
                 }
-            } else {
-                if (board.AI_Defense(action) != null) {
-                    actionAI = board.AI_Defense(action);
-                    System.out.println("D");
-                } else if (board.AI_Offensive(actionAI) != null) {
-                    actionAI = board.AI_Offensive(actionAI);
-                    System.out.println("o");
-                } else {
-                    actionAI = board.AI_BoringMove(actionAI);
-                    System.out.println("B");
-                }
 
-
-
-                board.setChess(actionAI);
-                System.out.println(actionAI.getX() + " " + actionAI.getY());
-//            refreshBoardCondition(actionAI);
-                stdShow(timer1.getT(), timer2.getT(), localCounter.getT());
+                Action action = tryAction;
+                board.setChess(action);
+//            refreshBoardCondition(action);
+                stdShow(timer1.getT(),timer2.getT(),localCounter.getT());
                 StdDraw.show();
-                System.out.println(board.isGameWin(actionAI));
 
-                if (board.isGameWin(actionAI)) {
+                if (board.isGameWin(action)){
                     isGameOver = true;
-                    showGameOver(Piece.BLACK);
+                    showGameOver(player);
                     StdDraw.show();
                 }
                 turn++;
@@ -214,18 +82,21 @@ public class aGameWithAI15 {
                 timer1.closeCounter();
                 timer2.closeCounter();
                 localCounter.resetT(30);
+            }catch (TimeOver | InterruptedException et){
+                et.printStackTrace();
+                showGameOver(player.getOpposite());
+                StdDraw.show();
+                break;
             }
-
-
         }
+        showGameOver(Piece.BLACK);
     }
-
 
     private void displayBackground(){
         StdDraw.setCanvasSize(727,1000);
         StdDraw.setXscale(0,727);
         StdDraw.setYscale(0,1000);
-        StdDraw.picture(363,500,".\\System\\draft3.jpg",727,1000);
+        StdDraw.picture(363,500,".\\System\\draft4.jpg",727,1000);
     }
 
     private void show(){
@@ -354,7 +225,7 @@ public class aGameWithAI15 {
     }
 
     private void veil(){
-        StdDraw.picture(363.5,500,".\\System\\Veil3.png");
+        StdDraw.picture(363.5,500,".\\System\\Veil4.jpg");
     }
 
     /**
@@ -423,11 +294,11 @@ public class aGameWithAI15 {
             StdDraw.picture(627,286,".\\Timer\\Arabic\\" + s2 + ".png");
         }
     }
-    public aGameWithAI15(int size) {
-        board = new AIChessBoard(size);
+    public aGame13(int size) {
+        board = new ChessBoard(size);
         PIECES_LOCATIONS = new Point[size][size];
         try {
-            File Locations = new File(".\\src\\System\\Mapping15.txt");
+            File Locations = new File(".\\src\\System\\Mapping13.txt");
             Scanner file = new Scanner(Locations);
             for (int x = 1; x <= this.getSize(); x++) {
                 String[] temp = file.nextLine().split(" ");
@@ -440,3 +311,4 @@ public class aGameWithAI15 {
         }
     }
 }
+

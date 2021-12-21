@@ -3,7 +3,7 @@ import java.util.Set;
 
 /**
  * This class serves as a Chess board with a handbook for Gomoku.
- * Wu change this code in 12/6.
+ * Wu change this code on 12/6.
  I think I find a better way to achieve isFive and is33,
  by 引入方向。只要沿有棋子的正反两方向搜索，够五个便isFive，够三个便isThree。
  */
@@ -111,6 +111,7 @@ public class ChessBoard {
             }catch (IndexOutOfBoundsException exception) {
                 break;
             }
+
         }
 
         // 沿反方向记录相邻子数
@@ -124,17 +125,18 @@ public class ChessBoard {
                 break;
             }
         }
+        System.out.println(v.name() + (numOfPieces == 6));
 
-        return numOfPieces >= 6;
+        return numOfPieces == 6;
     }
 
     public boolean isLiveThreeIn_v(Action Action, vector v) {
         int numOfPieces = 0;
 
         // 沿正方向记录相邻子数；若有敌子在后，不为活三，输出false
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 4; i++) {
             try {
-                if (board[Action.getX() + v.getI() * (i + 1)][Action.getY() + v.getJ() * (i + 1)] == Action.getOpposite())
+                if (board[Action.getX() + v.getI() * i ][Action.getY() + v.getJ() * i ] == Action.getOpposite())
                     return false;
                 else if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
                     numOfPieces++;
@@ -144,9 +146,9 @@ public class ChessBoard {
             }
         }
         // 沿反方向计数
-        for (int i = -1; i > -3; i--) {
+        for (int i = -1; i > -4; i--) {
             try {
-                if (board[Action.getX() + v.getI() * (i - 1)][Action.getY() + v.getJ() * (i - 1)] == Action.getOpposite())
+                if (board[Action.getX() + v.getI() * i ][Action.getY() + v.getJ() * i ] == Action.getOpposite())
                     return false;
                 else if (board[Action.getX() + v.getI() * i][Action.getY() + v.getJ() * i] == Action.getPiece())
                     numOfPieces++;
@@ -166,7 +168,7 @@ public class ChessBoard {
         for (vector v:findNeighbors(Action)) {
             haveFive = isFiveIn_v(Action,v);
         }
-
+        //System.out.println(haveFive + "have five");
         return haveFive;
     }
 
